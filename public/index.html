@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Sizer</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="logo">Image Sizer</div>
+    <p>Resize images to Apple App Store &amp; Google Play requirements. Nothing is uploaded.</p>
+  </header>
+  <div class="card">
+    <div class="drop-zone" id="dropzone" onclick="document.getElementById('fi').click()">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M12 12V4M8 8l4-4 4 4"/></svg>
+      <p>Drop your image here, or click to upload</p>
+      <small>PNG · JPG · WEBP · GIF</small>
+    </div>
+    <input type="file" id="fi" accept="image/*" style="display:none">
+  </div>
+  <div id="main" style="display:none">
+    <div class="card">
+      <div class="preview-bar">
+        <img id="thumb" src="" alt="preview">
+        <div class="info"><p id="fname"></p><small id="fdim"></small></div>
+        <button class="btn-sm" style="margin-left:auto" onclick="document.getElementById('fi').click()">Change image</button>
+      </div>
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('apple',this)">Apple</button>
+        <button class="tab" onclick="switchTab('google',this)">Google Play</button>
+        <button class="tab" onclick="switchTab('custom',this)">+ Custom</button>
+      </div>
+      <div id="tab-apple" class="platform-panel active">
+        <div class="top-actions">
+          <button class="btn-sm" onclick="selectGroup('apple',true)">Select all</button>
+          <button class="btn-sm" onclick="selectGroup('apple',false)">Deselect all</button>
+        </div>
+        <div id="list-apple"></div>
+      </div>
+      <div id="tab-google" class="platform-panel">
+        <div class="top-actions">
+          <button class="btn-sm" onclick="selectGroup('google',true)">Select all</button>
+          <button class="btn-sm" onclick="selectGroup('google',false)">Deselect all</button>
+        </div>
+        <div id="list-google"></div>
+      </div>
+      <div id="tab-custom" class="platform-panel">
+        <p class="help-text">Add any custom size to the export queue.</p>
+        <div class="custom-row">
+          <input type="number" id="cw" placeholder="Width px" min="1" max="9999">
+          <span class="sep">x</span>
+          <input type="number" id="ch" placeholder="Height px" min="1" max="9999">
+          <select id="cfit">
+            <option value="contain">Contain (letterbox)</option>
+            <option value="cover">Cover (crop center)</option>
+            <option value="fill">Fill (stretch)</option>
+          </select>
+          <input type="text" id="cname" placeholder="Label (optional)" class="label-input">
+          <button class="btn-sm" onclick="addCustom()">+ Add</button>
+        </div>
+        <p id="customErr" class="err-text"></p>
+      </div>
+      <hr class="divider">
+      <div class="selected-section">
+        <p class="section-label">Selected for export</p>
+        <div class="chips" id="chips"><p class="empty-note">No sizes selected yet.</p></div>
+      </div>
+      <div class="export-bar">
+        <p class="count"><strong id="selCount">0</strong> sizes selected</p>
+        <button class="btn-export" id="expBtn" onclick="startExport()" disabled>Generate &amp; Download ZIP</button>
+      </div>
+      <div id="progressWrap" style="display:none">
+        <div class="progress-bg"><div class="progress-fill" id="progressFill"></div></div>
+        <p id="progressLabel" class="progress-label"></p>
+      </div>
+      <div class="download-ready" id="dlReady" style="display:none">
+        <p id="dlMsg"></p>
+        <a id="dlLink" class="btn-download" download>Download ZIP</a>
+      </div>
+    </div>
+  </div>
+</div>
+<canvas id="cv" style="display:none"></canvas>
+<script src="jszip.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
